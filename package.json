@@ -1,0 +1,11 @@
+{
+  "name": "shanghai-artifact-merge",
+  "private": true,
+  "description": "以上海博物馆藏品为主题的浏览器合成小游戏",
+  "scripts": {
+    "test": "node tests/run.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

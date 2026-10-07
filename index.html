@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#103c39" />
+    <meta
+      name="description"
+      content="把上海博物馆的文物轻轻放下：相同藏品碰撞合成，点亮九件珍藏的知识图鉴。非官方文博小游戏。"
+    />
+    <title>合成上博 · 镇馆之宝</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23103c39'/%3E%3Cpath d='M17 18h30v7c0 14-5 20-15 20S17 39 17 25z' fill='%23e4bd6b'/%3E%3Cpath d='M21 43l-3 10m25-10 3 10M20 18v-7h7v7m10 0v-7h7v7' stroke='%23e4bd6b' stroke-width='5' fill='none'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="vendor/matter.min.js"></script>
+    <script defer src="src/artifacts.js"></script>
+    <script defer src="src/game.js"></script>
+  </head>
+  <body>
+    <main class="museum-game">
+      <header class="brand">
+        <div class="brand-kicker"><span class="seal">上</span> 一间可以玩的博物馆</div>
+        <h1>合成上博<span>镇馆之宝</span></h1>
+        <p class="brand-note">相同的相遇，新的珍藏登场</p>
+        <div class="desktop-intro">
+          <div class="intro-rule">
+            <b>01</b>
+            <p>移动瞄准，松手投放</p>
+          </div>
+          <div class="intro-rule">
+            <b>02</b>
+            <p>相同文物碰撞，合成新藏品</p>
+          </div>
+          <div class="intro-rule">
+            <b>03</b>
+            <p>点亮图鉴，收集九件珍藏</p>
+          </div>
+          <div class="small-stamp">收集美好<br />不论年代</div>
+        </div>
+      </header>
+      <section class="play-column" aria-label="文物合成游戏">
+        <div class="scorebar">
+          <div class="score-primary"><span>本局得分</span><strong id="score">0</strong></div>
+          <div class="best-block"><span>最高纪录</span><b id="best">0</b></div>
+          <div class="next-block">
+            <span>下一件</span><img id="next-image" alt="" /><b id="next-name"></b>
+          </div>
+        </div>
+        <div class="board-wrap" id="board-wrap">
+          <div class="board-top-label">
+            <span>SHANGHAI · COLLECTION</span><span id="collection-count">1 / 9</span>
+          </div>
+          <canvas
+            id="game"
+            width="420"
+            height="610"
+            tabindex="0"
+            aria-label="合成游戏区域：左右方向键瞄准，空格投放。也可拖动后松手投放。"
+          ></canvas>
+          <div id="first-hint" class="first-hint">
+            <span>轻轻放下第一件珍藏</span><small>拖动瞄准 · 松手投放</small>
+          </div>
+          <div id="danger-label" class="danger-label" aria-live="polite">留一点空间！</div>
+          <div class="board-bottom">
+            <span class="diamond">◆</span><span>让珍藏，相遇</span><span class="diamond">◆</span>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button id="gallery-btn" class="tool">
+            <span aria-hidden="true">▦</span> 珍藏图鉴 <span id="gallery-count">1/9</span></button
+          ><button id="sound-btn" class="tool icon-tool" aria-label="开启音效" aria-pressed="false">
+            <span aria-hidden="true">♫</span><span id="sound-label">静音</span></button
+          ><button id="pause-btn" class="tool icon-tool" aria-label="暂停游戏">
+            <span aria-hidden="true">Ⅱ</span><span>暂停</span>
+          </button>
+        </div>
+        <p class="mobile-hint">拖动瞄准，松手投放 · 相同文物碰撞合成</p>
+      </section>
+      <aside class="collection-panel">
+        <div class="panel-title">
+          <div>
+            <span class="eyebrow">YOUR COLLECTION</span>
+            <h2>小小镇馆局</h2>
+          </div>
+          <span class="panel-counter" id="panel-count">1 / 9</span>
+        </div>
+        <div id="progression" class="progression" aria-label="合成顺序"></div>
+        <button class="learn-card" id="latest-card">
+          <span class="eyebrow">已点亮的珍藏</span>
+          <div>
+            <img id="latest-image" alt="" />
+            <div>
+              <h3 id="latest-name"></h3>
+              <p id="latest-era"></p>
+            </div>
+          </div>
+          <p id="latest-fact"></p>
+          <span class="read-more">查看藏品卡 ↗</span>
+        </button>
+        <p class="collection-note">游戏合成顺序仅为玩法设计<br />不代表文物的年代或价值排序</p>
+      </aside>
+      <footer>
+        非上海博物馆官方作品 · 图像为艺术化示意<br class="mobile-only" />最高分与图鉴仅保存在本设备
+      </footer>
+    </main>
+    <dialog id="modal" aria-labelledby="modal-title"><div id="modal-body"></div></dialog>
+    <div class="sr-only" id="announcer" aria-live="polite"></div>
+    <div id="toast" class="toast" role="status"></div>
+    <aside id="unlock-notice" class="unlock-notice" aria-live="polite" hidden>
+      <img id="unlock-image" alt="" /><button id="unlock-open">
+        <strong id="unlock-title"></strong><span id="unlock-fact"></span
+        ><small>轻点查看藏品卡</small></button
+      ><button id="unlock-dismiss" aria-label="收起解锁提示">×</button>
+    </aside>
+  </body>
+</html>
